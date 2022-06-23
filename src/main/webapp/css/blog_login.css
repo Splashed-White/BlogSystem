@@ -1,0 +1,66 @@
+/* login.html css */
+
+/* 设置版心, 让这个版心把页面填充满 */
+/* 在这个版心的中间位置, 放一个登录区域 */
+.login-container {
+    width: 100%;
+    height: calc(100% - 50px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-dialog {
+    width: 400px;
+    height: 400px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    padding-top: 20px;
+}
+
+.login-dialog h3 {
+    text-align: center;
+    padding: 40px 0;
+    font-size: 30px;
+}
+
+.login-dialog .row {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.login-dialog .row span {
+    display: block;
+    width: 100px;
+    font-weight: 700;
+}
+
+.login-dialog .row input {
+    width: 200px;
+    height: 40px;
+    font-size: 20px;
+    padding-left: 10px;
+    /* 去掉边框 */
+    border: none;
+    /* 去掉轮廓线. 选中输入框的时候, 外面带的一圈黑边 */
+    outline: none;
+    /* 设置圆角矩形 */
+    border-radius: 10px;
+}
+
+.login-dialog .row #submit {
+    width: 300px;
+    height: 40px;
+    color: #fff;
+    background-color: #008000;
+    border: none;
+    border-radius: 10px;
+}
+
+.login-dialog .row #submit:active {
+    background-color: grey;
+}

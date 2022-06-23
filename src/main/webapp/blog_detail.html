@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客详情页</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/blog_detail.css">
+
+    <!-- 引入页面markdown解析成HTML需要的js：editor.md  -->
+    <link rel="stylesheet" href="editor.md/css/editormd.min.css" />
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="editor.md/lib/marked.min.js"></script>
+    <script src="editor.md/lib/prettify.min.js"></script>
+    <script src="editor.md/editormd.js"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="nav">
+        <img src="image/logo.jpg" alt="">
+        <span class="title">BlogSystem</span>
+        <span class="spacer"></span>
+        <a href="blog_list.html">主页</a>
+        <a href="blog_edit.html">写博客</a>
+        <a href="logout">注销</a>
+    </div>
+    <!-- 引入版心 -->
+    <div class="container">
+        <!-- 左侧个人信息 -->
+        <div class="container-left">
+            <!-- 用户详情 -->
+            <div class="card">
+                <!-- 用户头像 -->
+                <img src="image/dog.jpg" alt="">
+                <!-- 用户名 -->
+                <h3></h3>
+                <!-- github 地址 -->
+                <a href="https://www.github.com">GITHUB 地址</a>
+                <!-- 显示文章分类的数目 -->
+                <div class="counter">
+                    <span>文章</span>
+                    <span>分类</span>
+                </div>
+                <div class="counter">
+                    <span>2</span>
+                    <span>1</span>
+                </div>
+            </div>
+        </div>
+        <!-- 右侧博客详情 -->
+        <div class="container-right">
+            <!-- 放博客内容 -->
+            <div class="blog-content">
+                <!-- 博客的标题 -->
+                <h3></h3>
+                <!-- 博客的日期 -->
+                <div class="date"></div>
+                <!-- 博客正文 -->
+                <div id="content" style="background-color: transparent;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+        // 1. 构造ajax请求，获取博客详情
+        $.ajax({
+            url: "blog" + location.search, //url形如 blog?blogId=1
+            method: "GET",
+            success: function(data, status) {
+                buildBlog(data);
+            },
+            error: function() {
+                location.assign('blog_login.html');
+            }
+        });
+
+         // 构造HTML内容
+        function buildBlog(data) {
+            let titleH3 = document.querySelector('.blog-content h3');
+            titleH3.innerHTML = data.title;
+
+            let dateDiv = document.querySelector('.blog-content .date');
+            dateDiv.innerHTML = formatDate(data.postTime);
+
+            // Markdown to HTML 通过editor.md渲染
+            editormd.markdownToHTML('content', {markdown: data.content});
+        }
+
+        //把时间戳转成形如 2022-01-01 12:00:00 的格式化日期
+        function formatDate(time) {
+            var date = new Date(time);
+            var year = date.getFullYear(),
+                month = date.getMonth()+1,
+                day = date.getDate(),
+                hour = date.getHours(),
+                min = date.getMinutes(),
+                sec = date.getSeconds();
+            var newTime = year + '-' +
+                        (month < 10? '0' + month : month) + '-' +
+                        (day < 10? '0' + day : day) + ' ' +
+                        (hour < 10? '0' + hour : hour) + ':' +
+                        (min < 10? '0' + min : min) + ':' +
+                        (sec < 10? '0' + sec : sec);
+            return newTime;
+        }
+
+        // 2. 构造ajax请求，获取博客作者信息  
+        $.ajax({
+            url: 'user' + location.search, //url形如user?blogId=1
+            method: 'GET',
+            success: function(data, status) {
+                changeUser(data);
+            }
+        });
+
+        function changeUser(user) {
+            let h3 = document.querySelector('.container-left .card h3');
+            h3.innerHTML = user.username;
+            //根据user中的flag决定是否添加删除按钮至导航栏
+            if(user.flag){
+                //当前登录用户即为作者，显示删除按钮
+                let deleteButton = document.createElement('a');
+                deleteButton.innerHTML = "删除";
+                // 删除的请求形如 user?blogId=1
+                deleteButton.href = 'blogDelete' + location.search;
+
+                let navDiv = document.querySelector('.nav');
+                navDiv.appendChild(deleteButton);
+            }
+        }
+    </script>
+    
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客列表页</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/blog_list.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="nav">
+        <img src="image/logo.jpg" alt="">
+        <span class="title">BlogSystem</span>
+        <span class="spacer"></span>
+        <a href="blog_list.html">主页</a>
+        <a href="blog_edit.html">写博客</a>
+        <a href="logout">注销</a>
+    </div>
+    <!-- 版心 -->
+    <div class="container">
+        <!-- 左侧区域, 显示用户信息 -->
+        <div class="container-left">
+            <!-- 用户详情 -->
+            <div class="card">
+                <!-- 用户的头像 -->
+                <img src="image/dog.jpg" alt="">
+                <!-- 用户的名字 -->
+                <h3></h3>
+                <!-- github 地址 -->
+                <a href="https://www.github.com">GITHUB 链接</a>
+                <!-- 显示文章分类的数目 -->
+                <div class="counter">
+                    <span>文章</span>
+                    <span>分类</span>
+                </div>
+                <div class="counter">
+                    <span>2</span>
+                    <span>1</span>
+                </div>
+            </div>
+        </div>
+        <!-- 右侧区域, 显示博客列表 -->
+        <div class="container-right">
+            <!-- 每个 .blog 代表一个博客 -->
+            <!-- <div class="blog">
+                <div class="title">我的第一篇博客</div>
+                <div class="date">2022-01-24</div>
+                <div class="desc">
+                    从今天起, 我一定要认真敲代码, 争取以后找到一个好工作. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem magnam excepturi pariatur, nemo sunt ad, voluptate commodi temporibus molestiae omnis modi consequatur quaerat numquam placeat libero cupiditate rem officiis. Incidunt.
+                </div>
+                <a href="#" class="detail">查看全文 &gt; &gt;</a>
+            </div> -->
+            
+        </div>
+    </div>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+        // 1. 构造ajax请求，加载博客列表
+        $.ajax({
+            url: 'blog',
+            method: 'GET',
+            success: function(data, status) {
+                buildBlogs(data);
+            }, 
+            error: function() {
+                //ajax执行失败的回调函数，若服务器返回403，则触发该函数，此时处于未登陆状态，重定向到login.html
+                location.assign('blog_login.html');
+            }
+        });
+
+        // 获取到服务器数据后，实现构造页面功能
+        function buildBlogs(data) {
+            let container = document.querySelector('.container-right');
+            for (let blog of data) {
+                let blogDiv = document.createElement('div');
+                blogDiv.className = 'blog';
+
+                let titleDiv = document.createElement('div');
+                titleDiv.className = 'title';
+                titleDiv.innerHTML = blog.title;
+                blogDiv.appendChild(titleDiv);
+
+                let dateDiv = document.createElement("div");
+                dateDiv.className = 'date';
+                dateDiv.innerHTML = formatDate(blog.postTime);
+                blogDiv.appendChild(dateDiv);
+
+                let descDiv = document.createElement('div');
+                descDiv.className = 'desc';
+                descDiv.innerHTML = blog.content;
+                blogDiv.appendChild(descDiv);
+
+                let detailA = document.createElement('a');
+                detailA.className = 'detail';
+                detailA.innerHTML = '查看全文 &gt; &gt;';
+                 // 此处需指出要访问的博客详情具体是哪条博客(blogId)
+                detailA.href = 'blog_detail.html?blogId=' + blog.blogId;
+                blogDiv.appendChild(detailA);
+
+                container.appendChild(blogDiv);
+            }
+        }
+        //把时间戳转成形如 2022-01-01 12:00:00 的格式化日期
+        function formatDate(time) {
+            var date = new Date(time);
+            var year = date.getFullYear(),
+                month = date.getMonth()+1,
+                day = date.getDate(),
+                hour = date.getHours(),
+                min = date.getMinutes(),
+                sec = date.getSeconds();
+            var newTime = year + '-' +
+                        (month < 10? '0' + month : month) + '-' +
+                        (day < 10? '0' + day : day) + ' ' +
+                        (hour < 10? '0' + hour : hour) + ':' +
+                        (min < 10? '0' + min : min) + ':' +
+                        (sec < 10? '0' + sec : sec);
+            return newTime;
+        }
+
+         //  2. 构造ajax请求，获取用户的登录信息
+        $.ajax({
+            url: 'user',
+            method: 'GET',
+            success: function(data, status) {
+                buildUser(data);
+            }
+        });
+
+        function buildUser(data) {
+            let h3 = document.querySelector('.container-left .card h3');
+            h3.innerHTML = data.username;
+        }
+    </script>
+</body>
+</html>
