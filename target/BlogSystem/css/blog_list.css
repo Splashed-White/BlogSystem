@@ -1,0 +1,54 @@
+/* blog_list css */
+
+.blog {
+    width: 100%;
+    padding: 20px;
+}
+
+/* 博客的标题 */
+.blog .title {
+    color: black;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* 博客的日期 */
+.blog .date {
+    text-align: center;
+    padding: 10px 0;
+    color: #008000;
+}
+
+/* 博客的描述 */
+.blog .desc {
+    text-indent: 2em;
+}
+
+/* 查看博客详情的按钮 */
+.blog .detail {
+    /* a 标签是行内元素, 要先转成块级元素, 再设置尺寸 */
+    display: block;
+    width: 120px;
+    height: 40px;
+    /* 设置边框 */
+    border: 2px solid black;
+    /* 让文字水平居中 */
+    text-align: center;
+    /* 让文字垂直居中 */
+    line-height: 40px;
+    /* 去掉下划线 */
+    text-decoration: none;
+    /* 修改文字的颜色 */
+    color: black;
+    /* 让按钮来到屏幕中间 */
+    margin: 10px auto;
+    /* 加上一个过渡效果 */
+    transition: all 0.5s;
+}
+
+/* 实现一下鼠标悬停在按钮上时候有一个背景色切换的效果 */
+.blog .detail:hover {
+    background-color: #666;
+    color: #fff;
+}

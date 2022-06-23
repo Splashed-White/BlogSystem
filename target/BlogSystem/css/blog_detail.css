@@ -1,0 +1,26 @@
+/* blog_detail css */
+
+.blog-content {
+    padding: 30px;
+    /*内容过长溢出时，浏览器会自动添加滚动条，以便查看剩下的内容*/
+    overflow:auto;
+}
+
+/* 博客标题 */
+.blog-content h3 {
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* 博客日期 */
+.blog-content .date {
+    color: #008000;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* 博客内容的段落 */
+.blog-content p {
+    text-indent: 2em;
+    padding: 10px 0;
+}
